@@ -1,0 +1,3 @@
+[submodule "stars"]
+	path = stars
+	url = henrique@pino:/opt/arch/local_bare/stars.git

@@ -11,15 +11,21 @@ from io import StringIO
 
 def main():
     mkd = MyMarkdown()
-    lst = mkd.scan_dir("sets")
-    print("List:", mkd.paths())
+    lst = mkd.scan_dir(os.path.join("stars", "sets"))
+    #print("List:", mkd.paths())
     for mdf, path in mkd.listed():
         res = mkd.scan(path)
         print(f"{path}:")
-        for idx, line in enumerate(res, 1):
-            pre = f"{mdf}:"
-            print(f"{pre}{idx}: {line}")
+        dump_stuff(res, path, mkd.listed())
         print()
+
+def dump_stuff(lst, path, mkd):
+    path = os.path.realpath(path)
+    for idx, line in enumerate(lst, 1):
+        pre = f"{mdf}:" if len(mkd) > 1 else ""
+        uline = line[len(path) + 1:] if line.startswith(path + ":") else line
+        print(f"{pre}err={idx}/{len(lst)}: {uline}")
+    return len(lst) <= 0
 
 
 class GenericDown:
@@ -66,7 +72,6 @@ class MyMarkdown(GenericDown):
     def scan(self, path: str):
         """ Run 'pymarkdown scan <path>' and return a list of output lines.
         """
-        print("SCAN:", path)
         buffer = StringIO()
         old_stdout = sys.stdout
         sys.stdout = buffer
